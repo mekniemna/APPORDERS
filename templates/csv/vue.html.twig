@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	{% if not app.user %}
+		<div class="container">
+			<div class="row content">
+				<div class="alert alert-primary" role="alert">
+					Sign in so that you can download orders !
+					<a href="{{path('login')}}" class="link-success">Sign in</a>
+				</div>
+			</div>
+		</div>
+        {% else %}
+		<div class="container">
+			<div class="row content">
+				<div class="col-md-6 mb-3">
+					<p class=" mt-5 ">
+						You can download orders informations into csv file from here
+					</p>
+				</div>
+				<div class="md-6 mx-5">
+					<form action="{{path('download')}}">
+						<button type="submit" class="btn btn-outline-primary" href="{{path('download')}}">Download orders</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+        {% endif %}
+
+
+	{% endblock %}
