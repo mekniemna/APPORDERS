@@ -29,17 +29,17 @@ class CsvController extends AbstractController
     /**
      * @Route("/orders-to-csv", name="download")
      */
-    //passer du service callApiservice avec linjection de dépendes au fonction download pour récupérer les données reçu du callApiService
+    //passer du service callApiservice avec linjection de dépendances du symfony au fonction download pour récupérer les données reçu du callApiService
     public function download(callApiservice $callApiservice){
         //définition entete fichier excel le ; sépare les données en colonnes
         $myVariableCSV = "Champ; Description;\n";
-        //récupération des fonctions du service 
+        //récupération des fonctions du service callApiService
         $orders=$callApiservice->getOrders();
         $contacts=$callApiservice->getContacts();
 
         // boucle for sur le tableau  mutidimentionnel $orders pour le parcourir
         for($i=0;$i<count($orders['results']);$i++){
-            // récupération du champ order number 
+            // récupération du champ order number  et convertion en chaine de caractères pour pouvoir le stocker dans le fichier excel
             $ordernumber=json_encode($orders['results'][$i]['OrderNumber']);
             //définition  dans une ligne pour pouvoir ajouter ensuite dans un fichier excel
             $myVariableCSV .= " order;$ordernumber;  \n";
@@ -60,7 +60,7 @@ class CsvController extends AbstractController
                      $myVariableCSV .= " delivery_city;$city;  \n";                    
                 }            
             }
-            //nombre d'items dans un order
+            //nombre d'items dans un order avec la fonction count sur le tableau  SalesOrderLines
            $items=json_encode(count($orders['results'][$i]['SalesOrderLines']['results']));
              // parcourir le tableau SalesOrdersLines pour récupérer les données du chaque item du order
             for($t=0;$t<$items;$t++){
@@ -81,12 +81,11 @@ class CsvController extends AbstractController
              $myVariableCSV .= " price_excl_vat;$price_excl_vat;  \n";
 
            }
-           // le \n à la fin permets de faire un saut de ligne  super important en CSV
+           // le \n à la fin permets de faire un saut de ligne  en CSV
            $myVariableCSV .= " ; ; ; \n";
 
         }
-   
-    $myVariableCSV .= " ; ; ; \n";
+          $myVariableCSV .= " ; ; ; \n";
     //On donne la variable en string à la response, nous définissons le code HTTP à 200
     return new Response(
            $myVariableCSV,

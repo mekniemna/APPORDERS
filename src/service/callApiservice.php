@@ -7,7 +7,7 @@ class callApiservice
 {
     private $client;
 
-    //Using the HttpClient class to make requests
+    //Utilisation  du  HttpClient classe  pour la communication avec l'API
 
     public function __construct(HttpClientInterface $client)
     {
